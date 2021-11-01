@@ -1,29 +1,40 @@
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 
-//REFERENCIAS: https://www.programarya.com/Cursos-Avanzados/Java/Sockets
-public class Repetidor {
+import javax.crypto.SecretKey;
 
-	private final int PUERTO = 1234; //Puerto para la conexión
-    private final String HOST = "localhost"; //Host para la conexión
-    protected String mensajeServidor; //Mensajes recibidos en el servidor
-    protected ServerSocket ss; //Socket del servidor
-    protected Socket cs; //Socket del cliente
-    protected DataOutputStream salidaServidor, salidaCliente; //Flujo de datos de salida
-
-    public Repetidor(String tipo) throws IOException 
-    {
-        if(tipo.equalsIgnoreCase("servidor"))
-        {
-            ss = new ServerSocket(PUERTO);//Se crea el socket para el servidor en puerto 1234
-            cs = new Socket(); //Socket para el cliente
-        }
-        else
-        {
-            cs = new Socket(HOST, PUERTO); //Socket para el cliente en localhost en puerto 1234
-        }
-    }	
+// REFERENCIAS: https://www.programarya.com/Cursos-Avanzados/Java/Sockets
+public class Repetidor extends Principal{
+	private String modo;
 	
+    public Repetidor(String pmodo) throws IOException{
+
+    	super("repetidor");
+    	modo = pmodo;
+    	
+    } 
+
+    public void startClient() //Método para iniciar el cliente
+    {
+        try
+        {
+            //Flujo de datos hacia el servidor
+            salidaServidor = new DataOutputStream(cs.getOutputStream());
+
+            //Se enviarán dos mensajes
+            for (int i = 0; i < 2; i++)
+            {
+                //Se escribe en el servidor usando su flujo de datos
+                salidaServidor.writeUTF("Este es el mensaje número " + (i+1) + "\n");
+            }
+
+            cs.close();//Fin de la conexión
+
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
+
 }

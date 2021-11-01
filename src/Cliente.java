@@ -1,12 +1,16 @@
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import javax.crypto.SecretKey;
+
 // REFERENCIAS: https://www.programarya.com/Cursos-Avanzados/Java/Sockets
-public class Cliente extends Repetidor{
+public class Cliente extends Principal{
+	private String modo;
 	
-    public Cliente() throws IOException{
-    	
+    public Cliente(String pmodo) throws IOException{
+
     	super("cliente");
+    	modo = pmodo;
     	
     } 
 

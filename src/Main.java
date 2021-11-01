@@ -1,4 +1,5 @@
 import java.io.FileNotFoundException;
+import java.util.Scanner;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -12,16 +13,17 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
 public class Main {
-	private final static String PADDING = "AES/ECB/PKCS5Padding";
+	private final static String ALGORITMO2 = "AES";
 	private final static String ALGORITMO = "RSA";
 	private final static String ARCHIVO1 = "simetrica";
 	private final static String ARCHIVO2 = "publica";
 	private final static String ARCHIVO3 = "privada";
+	private static Scanner sc;
 	
 	public static void main(String[] args) throws NoSuchAlgorithmException, IOException{
 
-		KeyGenerator keygen = KeyGenerator.getInstance(PADDING);
-		//keygen.init(128);
+		KeyGenerator keygen = KeyGenerator.getInstance(ALGORITMO2);
+		keygen.init(128);
 		SecretKey secretKey = keygen.generateKey();
 		
 		KeyPairGenerator generator = KeyPairGenerator.getInstance(ALGORITMO);
@@ -29,10 +31,10 @@ public class Main {
 		KeyPair keypair = generator.generateKeyPair();
 		PublicKey publica = keypair.getPublic();
 		PrivateKey privada = keypair.getPrivate();
-		
+
+		/*
 		FileOutputStream archivo;
 		ObjectOutputStream oos;
-		
 		archivo = new FileOutputStream(ARCHIVO1);
 		oos = new ObjectOutputStream(archivo);
 		oos.writeObject(secretKey);
@@ -44,5 +46,19 @@ public class Main {
 		archivo = new FileOutputStream(ARCHIVO3);
 		oos = new ObjectOutputStream(archivo);
 		oos.writeObject(privada);
+		*/
+		
+		sc = new Scanner(System.in);
+		System.out.print("Ingrese el modo (Asimetrico o Simetrico): ");
+		String modo = sc.nextLine();
+		if(modo.equals("Asimetrico") || modo.equals("Simetrico")) {
+			System.out.println("Modo no encontrado");
+		}
+		
+		Cliente cliente = new Cliente(modo);
+		Servidor servidor = new Servidor(modo);
+		Repetidor repetidor = new Repetidor(modo);
+		
+		
 	}
 }

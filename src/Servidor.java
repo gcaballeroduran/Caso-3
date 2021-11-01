@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 //REFERENCIAS: https://www.programarya.com/Cursos-Avanzados/Java/Sockets
-public class Servidor extends Repetidor {
+public class Servidor extends Principal {
 	
-    public Servidor() throws IOException{
+	private String modo;
+	
+    public Servidor(String modo) throws IOException{
     	
     	super("servidor");
     	
