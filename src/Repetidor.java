@@ -1,40 +1,66 @@
-import java.io.DataOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 
-import javax.crypto.SecretKey;
+public class Repetidor{
 
-// REFERENCIAS: https://www.programarya.com/Cursos-Avanzados/Java/Sockets
-public class Repetidor extends Principal{
-	private String modo;
+
+	public static final int PUERTO = 3401; //Puerto del servidor
+	public static final int PUERTO2 = 3400; //Puerto del repetidor
+	public static final String SERVIDOR = "localhost";
 	
-    public Repetidor(String pmodo) throws IOException{
-
-    	super("repetidor");
-    	modo = pmodo;
-    	
-    } 
-
-    public void startClient() //Método para iniciar el cliente
-    {
-        try
-        {
-            //Flujo de datos hacia el servidor
-            salidaServidor = new DataOutputStream(cs.getOutputStream());
-
-            //Se enviarán dos mensajes
-            for (int i = 0; i < 2; i++)
-            {
-                //Se escribe en el servidor usando su flujo de datos
-                salidaServidor.writeUTF("Este es el mensaje número " + (i+1) + "\n");
-            }
-
-            cs.close();//Fin de la conexión
-
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-        }
-    }
-
+	public static void main(String[] args) throws IOException {
+		ServerSocket ss = null;
+		boolean seguir = true;
+		
+		try {
+			ss = new ServerSocket(PUERTO2);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		while(seguir)
+		{
+			Socket socketCliente = ss.accept();
+			
+			try {
+				PrintWriter escritorCliente = new PrintWriter(socketCliente.getOutputStream(), true);
+				BufferedReader lectorCliente = new BufferedReader(new InputStreamReader(socketCliente.getInputStream()));
+				
+				escritorCliente.println(); //Flujo de salida al cliente
+				lectorCliente.readLine(); //Flujo de entrada del cliente
+				
+				Socket socketServidor = null;
+				PrintWriter escritorServidor = null;
+				BufferedReader lectorServidor = null;
+				
+				try {
+					socketServidor = new Socket(SERVIDOR, PUERTO);
+					escritorServidor = new PrintWriter(socketServidor.getOutputStream(), true);
+					lectorServidor = new BufferedReader(new InputStreamReader(socketServidor.getInputStream()));
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				escritorServidor.println(); //Flujo de salida al servidor
+				lectorServidor.readLine(); //Flujo de entrada del servidor
+				
+				
+				
+				escritorCliente.close();
+				lectorCliente.close();
+				socketCliente.close();
+				escritorServidor.close();
+				lectorServidor.close();
+				socketServidor.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
 }

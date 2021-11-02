@@ -1,40 +1,33 @@
-import java.io.DataOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 
-import javax.crypto.SecretKey;
-
-// REFERENCIAS: https://www.programarya.com/Cursos-Avanzados/Java/Sockets
-public class Cliente extends Principal{
-	private String modo;
+public class Cliente{
+	public static final int PUERTO = 3400; //Puerto del repetidor
+	public static final String SERVIDOR = "localhost";
 	
-    public Cliente(String pmodo) throws IOException{
-
-    	super("cliente");
-    	modo = pmodo;
-    	
-    } 
-
-    public void startClient() //Método para iniciar el cliente
-    {
-        try
-        {
-            //Flujo de datos hacia el servidor
-            salidaServidor = new DataOutputStream(cs.getOutputStream());
-
-            //Se enviarán dos mensajes
-            for (int i = 0; i < 2; i++)
-            {
-                //Se escribe en el servidor usando su flujo de datos
-                salidaServidor.writeUTF("Este es el mensaje número " + (i+1) + "\n");
-            }
-
-            cs.close();//Fin de la conexión
-
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-        }
-    }
-
+	public static void main(String[] args) throws IOException {
+		Socket socket = null;
+		PrintWriter escritor = null;
+		BufferedReader lector = null;
+		
+		try {
+			socket = new Socket(SERVIDOR, PUERTO);
+			escritor = new PrintWriter(socket.getOutputStream(), true);
+			lector = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		escritor.println(); //Flujo de salida al repetidor
+		lector.readLine(); //Flujo de entrada del repetidor
+		
+		
+		escritor.close();
+		lector.close();
+		socket.close();
+	}
 }

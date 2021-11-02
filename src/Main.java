@@ -55,9 +55,9 @@ public class Main {
 			System.out.println("Modo no encontrado");
 		}
 		
-		Cliente cliente = new Cliente(modo);
-		Servidor servidor = new Servidor(modo);
-		Repetidor repetidor = new Repetidor(modo);
+		//Cliente cliente = new Cliente(modo);
+		//Servidor servidor = new Servidor(modo);
+		//Repetidor repetidor = new Repetidor(modo);
 		
 		
 	}
