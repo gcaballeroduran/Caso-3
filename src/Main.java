@@ -42,10 +42,6 @@ public class Main {
 		archivo = new FileOutputStream(ARCHIVO2);
 		oos = new ObjectOutputStream(archivo);
 		oos.writeObject(publica);
-		
-		archivo = new FileOutputStream(ARCHIVO3);
-		oos = new ObjectOutputStream(archivo);
-		oos.writeObject(privada);
 		*/
 		
 		sc = new Scanner(System.in);
@@ -54,8 +50,19 @@ public class Main {
 		if(modo.equals("Asimetrico") || modo.equals("Simetrico")) {
 			System.out.println("Modo no encontrado");
 		}
-		
-		//Cliente cliente = new Cliente(modo);
+		for(int i=0 ; i<10 ; i++)
+		{
+			double proba = Math.random();
+			String algo = "";
+			if(proba < 0.5)
+			{
+				algo="Simetrico";
+			}
+			else {
+				algo="Asimetrico";
+			}
+			new Cliente(i,algo);
+		}
 		//Servidor servidor = new Servidor(modo);
 		//Repetidor repetidor = new Repetidor(modo);
 		

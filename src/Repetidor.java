@@ -8,9 +8,9 @@ import java.net.Socket;
 public class Repetidor{
 
 
-	public static final int PUERTO = 3401; //Puerto del servidor
-	public static final int PUERTO2 = 3400; //Puerto del repetidor
-	public static final String SERVIDOR = "localhost";
+	private static final int PUERTO = 3401; //Puerto del servidor
+	private static final int PUERTO2 = 3400; //Puerto del repetidor
+	private static final String SERVIDOR = "localhost";
 	
 	public static void main(String[] args) throws IOException {
 		ServerSocket ss = null;
@@ -30,9 +30,6 @@ public class Repetidor{
 				PrintWriter escritorCliente = new PrintWriter(socketCliente.getOutputStream(), true);
 				BufferedReader lectorCliente = new BufferedReader(new InputStreamReader(socketCliente.getInputStream()));
 				
-				escritorCliente.println(); //Flujo de salida al cliente
-				lectorCliente.readLine(); //Flujo de entrada del cliente
-				
 				Socket socketServidor = null;
 				PrintWriter escritorServidor = null;
 				BufferedReader lectorServidor = null;
@@ -46,8 +43,14 @@ public class Repetidor{
 					e.printStackTrace();
 				}
 				
+				
+				lectorCliente.readLine(); //Flujo de entrada del cliente
+				
 				escritorServidor.println(); //Flujo de salida al servidor
+				
 				lectorServidor.readLine(); //Flujo de entrada del servidor
+
+				escritorCliente.println(); //Flujo de salida al cliente
 				
 				
 				

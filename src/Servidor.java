@@ -7,7 +7,7 @@ import java.net.Socket;
 
 public class Servidor{
 
-	public static final int PUERTO = 3401; //Puerto del servidor
+	private static final int PUERTO = 3401; //Puerto del servidor
 	
 	public static void main(String[] args) throws IOException {
 		ServerSocket ss = null;
@@ -27,8 +27,8 @@ public class Servidor{
 				PrintWriter escritor = new PrintWriter(socket.getOutputStream(), true);
 				BufferedReader lector = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				
-				escritor.println(); //Flujo de salida al repetidor
 				lector.readLine(); //Flujo de entrada del repetidor
+				escritor.println(); //Flujo de salida al repetidor
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

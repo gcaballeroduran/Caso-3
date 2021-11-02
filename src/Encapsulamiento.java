@@ -1,6 +1,6 @@
 
 public class Encapsulamiento {
-	public String Encapsular( byte[] b )
+	public static String Encapsular( byte[] b )
 	{
 		// Encapsulamiento con hexadecimales
 		String ret = "";
@@ -11,7 +11,7 @@ public class Encapsulamiento {
 		return ret;
 	}
 	
-	public byte[] Desencapsular( String ss)
+	public static byte[] Desencapsular( String ss)
 	{
 		// Encapsulamiento con hexadecimales
 		byte[] ret = new byte[ss.length()/2];
