@@ -8,7 +8,6 @@ private final static String PADDING = "AES/ECB/PKCS5Padding";
 public static byte[] cifrar(SecretKey llave, String texto) {
 	byte[] textoCifrado;
 
-	long inicial = System.nanoTime();
 
 	try {
 		Cipher cifrador = Cipher.getInstance(PADDING);
@@ -16,10 +15,6 @@ public static byte[] cifrar(SecretKey llave, String texto) {
 
 		cifrador.init(Cipher.ENCRYPT_MODE, llave);
 		textoCifrado = cifrador.doFinal(textoClaro);
-		
-
-		long fin = System.nanoTime();
-		System.out.println(fin-inicial);
 
 		return textoCifrado;
 
@@ -31,7 +26,6 @@ public static byte[] cifrar(SecretKey llave, String texto) {
 
 public static byte [] descifrar(SecretKey llave, byte[] texto) {
 	byte[] textoClaro;
-	long inicial = System.nanoTime();
 	try {
 		Cipher cifrador = Cipher.getInstance(PADDING);
 		cifrador.init(Cipher.DECRYPT_MODE, llave);
@@ -41,8 +35,6 @@ public static byte [] descifrar(SecretKey llave, byte[] texto) {
 		System.out.println("Excepcion: " + e.getMessage());
 		return null;
 	}
-	long fin = System.nanoTime();
-System.out.println(fin-inicial);
 return textoClaro;
 		
 }
