@@ -97,6 +97,7 @@ public class Servidor extends Thread{
 				String algoritmo = lector.readLine();
 				if(algoritmo.equals("Simetrico"))
 				{
+					long startTime = System.nanoTime();
 					String cifradoRepetidor = lector.readLine();
 					byte[] SimRepetidor = Encapsulamiento.Desencapsular(cifradoRepetidor);
 					byte[] mensajeRepetidorByte = Simetrico.descifrar(secretKey, SimRepetidor);
@@ -107,9 +108,15 @@ public class Servidor extends Thread{
 					byte[] SimParaRepetidor = Simetrico.cifrar(secretKey, envio);
 					String CapsulaParaRepetidor = Encapsulamiento.Encapsular(SimParaRepetidor);
 					escritor.println(CapsulaParaRepetidor);
+					
+					long endTime = System.nanoTime();
+					// Calcular tiempo 
+					System.out.println("Mensaje descifrado por servidor "+( endTime -startTime)+ " nanosegundos");
+					
 				}
 				else
 				{
+					long startTime = System.nanoTime();
 					String cifradoRepetidor = lector.readLine();
 					byte[] AsimRepetidor = Encapsulamiento.Desencapsular(cifradoRepetidor);
 					byte[] mensajeRepetidorByte = Asimetrico.descifrar(privada, AsimRepetidor);
@@ -131,6 +138,11 @@ public class Servidor extends Thread{
 					byte[] AsimParaRepetidor = Asimetrico.cifrar(publicaRepetidor, envio);
 					String CapsulaParaRepetidor = Encapsulamiento.Encapsular(AsimParaRepetidor);
 					escritor.println(CapsulaParaRepetidor);
+					
+					long endTime = System.nanoTime();
+					// Calcular tiempo 
+					System.out.println("Mensaje descifrado por servidor "+( endTime -startTime)+ " nanosegundos");
+					
 				}
 			}
 		} catch (Exception e) {

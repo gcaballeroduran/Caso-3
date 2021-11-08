@@ -38,6 +38,7 @@ public class Cliente extends Thread{
 		super.run();
 	}
 	public void ejecucion(){
+		long startTime = System.nanoTime();
 		Socket socket = null;
 		PrintWriter escritor = null;
 		BufferedReader lector = null;
@@ -86,6 +87,10 @@ public class Cliente extends Thread{
 				byte[] descifrado = Simetrico.descifrar(llave, mensajeDeRepetidorBytes);
 				String respuestaFinal = new String(descifrado);
 				System.out.println(respuestaFinal);
+				long endTime = System.nanoTime();
+				
+				// Calcular tiempo 
+				System.out.println("Mensaje se envia al repetidor "+( endTime -startTime));
 				
 			}
 			else {
@@ -132,6 +137,10 @@ public class Cliente extends Thread{
 				byte[] descifrado = Asimetrico.descifrar(privada, mensajeDeRepetidorBytes);
 				String respuestaFinal = new String(descifrado);
 				System.out.println(respuestaFinal);
+				
+				long endTime = System.nanoTime();
+				// Calcular tiempo 
+				System.out.println("Mensaje se envia al repetidor "+( endTime -startTime)+ " nanosegundos");
 				
 				/*
 				*/

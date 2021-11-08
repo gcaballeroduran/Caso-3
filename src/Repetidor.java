@@ -39,6 +39,7 @@ public class Repetidor extends Thread{
 			
 			while(seguir)
 			{
+				long startTime = System.nanoTime();
 				Socket socketCliente = ss.accept();
 				KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
 				generator.initialize(1024);
@@ -126,6 +127,11 @@ public class Repetidor extends Thread{
 						byte[] mensajeAClienteBytes = Simetrico.cifrar(SimetricoCliente, mensajeDeServidor);
 						String CapsulaACliente = Encapsulamiento.Encapsular(mensajeAClienteBytes);
 						escritorCliente.println(CapsulaACliente);
+						
+
+						long endTime = System.nanoTime();
+						// Calcular tiempo 
+						System.out.println("Mensaje se envia al servidor "+( endTime -startTime)+ " nanosegundos");
 					}
 					else {
 
@@ -171,6 +177,10 @@ public class Repetidor extends Thread{
 						byte[] mensajeAClienteBytes = Asimetrico.cifrar(publicaCliente, mensajeDeServidor);
 						String CapsulaACliente = Encapsulamiento.Encapsular(mensajeAClienteBytes);
 						escritorCliente.println(CapsulaACliente);
+						
+						long endTime = System.nanoTime();
+						// Calcular tiempo 
+						System.out.println("Mensaje se envia al servidor "+( endTime -startTime)+ " nanosegundos");
 						
 						
 						/*
