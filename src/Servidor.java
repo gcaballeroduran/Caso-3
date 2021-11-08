@@ -100,33 +100,19 @@ public class Servidor extends Thread{
 					String cifradoRepetidor = lector.readLine();
 					byte[] SimRepetidor = Encapsulamiento.Desencapsular(cifradoRepetidor);
 					byte[] mensajeRepetidorByte = Simetrico.descifrar(secretKey, SimRepetidor);
-					System.out.println(mensajeRepetidorByte);
 					String mensajeRepetidor = new String(mensajeRepetidorByte);
 
 					String envio = map.get(mensajeRepetidor);
 					
-					FileInputStream input = new FileInputStream("SimetricoRepetidor");
-					ObjectInputStream ois = new ObjectInputStream(input);
-					SecretKey secretKeyRepetidor = null;
-					while(input.available() > 0)
-					{
-						secretKeyRepetidor = (SecretKey) ois.readObject();
-					}
-					input.close();
-					ois.close();
-					
-					
-					byte[] SimParaRepetidor = Simetrico.cifrar(secretKeyRepetidor, envio);
+					byte[] SimParaRepetidor = Simetrico.cifrar(secretKey, envio);
 					String CapsulaParaRepetidor = Encapsulamiento.Encapsular(SimParaRepetidor);
 					escritor.println(CapsulaParaRepetidor);
 				}
 				else
 				{
-					
 					String cifradoRepetidor = lector.readLine();
 					byte[] AsimRepetidor = Encapsulamiento.Desencapsular(cifradoRepetidor);
 					byte[] mensajeRepetidorByte = Asimetrico.descifrar(privada, AsimRepetidor);
-					System.out.println(mensajeRepetidorByte);
 					String mensajeRepetidor = new String(mensajeRepetidorByte);
 
 					String envio = map.get(mensajeRepetidor);

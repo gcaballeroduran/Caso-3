@@ -75,18 +75,8 @@ public class Cliente extends Thread{
 				escritor.println("CLIENTE_"+id);
 				String OK = lector.readLine();
 				
-				FileInputStream input = new FileInputStream("SimetricoRepetidor");
-				
-				ObjectInputStream ois = new ObjectInputStream(input);
-				SecretKey secretKeyRepetidor = null;
-				while(input.available() > 0)
-				{
-					secretKeyRepetidor = (SecretKey) ois.readObject();
-				}
-				input.close();
-				ois.close();
-				
-				byte[] cifradoRepetidor = Simetrico.cifrar(secretKeyRepetidor, "0"+id);
+				byte[] cifradoRepetidor = Simetrico.cifrar(llave, "0"+id);
+				System.out.println("Pedido: 0"+id);
 				String capsulaRepetidor = Encapsulamiento.Encapsular(cifradoRepetidor);
 				
 				escritor.println(capsulaRepetidor);
@@ -132,6 +122,7 @@ public class Cliente extends Thread{
 				ois.close();
 				
 				byte[] cifradoRepetidor = Asimetrico.cifrar(publicaRepetidor, "0"+id);
+				System.out.println("Pedido: 0"+id);
 				String capsulaRepetidor = Encapsulamiento.Encapsular(cifradoRepetidor);
 				
 				escritor.println(capsulaRepetidor);

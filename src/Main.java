@@ -52,11 +52,17 @@ public class Main {
 //		}
 		new Servidor().start();
 		new Repetidor().start();
+		Scanner sc = new Scanner(System.in);
+		System.out.print("Ingrese la cantidad de clientes: ");
+		int i = sc.nextInt();
+		System.out.print("Ingrese el algoritmo de clientes: ");
+		String algo2 = sc.next();
 		
-		for(int i=0 ; i<10 ; i++)
+		for(int j=0; j<i ; j++)
 		{
 			double proba = Math.random();
 			String algo = "";
+			int valor = j%10;
 			if(proba < 0.5)
 			{
 				algo="Simetrico";
@@ -64,7 +70,7 @@ public class Main {
 			else {
 				algo="Asimetrico";
 			}
-			new Cliente(i,"Simetrico"); //Por ahora todos asimetricos CAMBIAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			new Cliente(valor,algo2);//Si se cambia la variable a algo
 		}
 		
 		System.exit(0);
