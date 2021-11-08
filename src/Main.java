@@ -21,7 +21,7 @@ public class Main {
 	private static Scanner sc;
 	
 	public static void main(String[] args) throws NoSuchAlgorithmException, IOException{
-
+/*
 		KeyGenerator keygen = KeyGenerator.getInstance(ALGORITMO2);
 		keygen.init(128);
 		SecretKey secretKey = keygen.generateKey();
@@ -31,7 +31,7 @@ public class Main {
 		KeyPair keypair = generator.generateKeyPair();
 		PublicKey publica = keypair.getPublic();
 		PrivateKey privada = keypair.getPrivate();
-
+*/
 		/*
 		FileOutputStream archivo;
 		ObjectOutputStream oos;
@@ -43,13 +43,16 @@ public class Main {
 		oos = new ObjectOutputStream(archivo);
 		oos.writeObject(publica);
 		*/
+//		
+//		sc = new Scanner(System.in);
+//		System.out.print("Ingrese el modo (Asimetrico o Simetrico): ");
+//		String modo = sc.nextLine();
+//		if(modo.equals("Asimetrico") || modo.equals("Simetrico")) {
+//			System.out.println("Modo no encontrado");
+//		}
+		new Servidor().start();
+		new Repetidor().start();
 		
-		sc = new Scanner(System.in);
-		System.out.print("Ingrese el modo (Asimetrico o Simetrico): ");
-		String modo = sc.nextLine();
-		if(modo.equals("Asimetrico") || modo.equals("Simetrico")) {
-			System.out.println("Modo no encontrado");
-		}
 		for(int i=0 ; i<10 ; i++)
 		{
 			double proba = Math.random();
@@ -61,11 +64,7 @@ public class Main {
 			else {
 				algo="Asimetrico";
 			}
-			new Cliente(i,algo);
+			new Cliente(i,"Asimetrico"); //Por ahora todos asimetricos CAMBIAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		}
-		//Servidor servidor = new Servidor(modo);
-		//Repetidor repetidor = new Repetidor(modo);
-		
-		
 	}
 }

@@ -4,11 +4,13 @@ import javax.crypto.Cipher;
 
 public class Asimetrico {
 
-	public static byte[] cifrar(Key llave, String algoritmo, String texto) {
+	private final static String ALGORITMO = "RSA";
+	
+	public static byte[] cifrar(Key llave, String texto) {
 		byte[] textoCifrado;
 			
 		try {
-			Cipher cifrador = Cipher.getInstance(algoritmo);
+			Cipher cifrador = Cipher.getInstance(ALGORITMO);
 			byte[] textoClaro = texto.getBytes();
 			
 			cifrador.init(Cipher.ENCRYPT_MODE, llave);
@@ -21,11 +23,11 @@ public class Asimetrico {
 		}
 	}
 	
-	public static byte[] descifrar(Key llave, String algoritmo, byte[] texto) {
+	public static byte[] descifrar(Key llave, byte[] texto) {
 		byte[] textoClaro;
 			
 		try {
-			Cipher cifrador = Cipher.getInstance(algoritmo);
+			Cipher cifrador = Cipher.getInstance(ALGORITMO);
 			cifrador.init(Cipher.DECRYPT_MODE, llave);
 			textoClaro = cifrador.doFinal(texto);
 		} catch (Exception e) {

@@ -1,11 +1,22 @@
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+
+import com.sun.javafx.binding.SelectBinding.AsObject;
+
 
 public class Cliente extends Thread{
 	private static final int PUERTO = 3400; //Puerto del repetidor
@@ -19,17 +30,22 @@ public class Cliente extends Thread{
 	{
 		id=pid;
 		algoritmo=palgoritmo;
-		this.start();
+		this.ejecucion();
 	}
 	
 	@Override
-	public void run(){
+	public void run() {
+		// TODO Auto-generated method stub
+		super.run();
+	}
+	public void ejecucion(){
 		Socket socket = null;
 		PrintWriter escritor = null;
 		BufferedReader lector = null;
 		try {
 			
 			try {
+			
 				socket = new Socket(SERVIDOR, PUERTO);
 				escritor = new PrintWriter(socket.getOutputStream(), true);
 				lector = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -37,8 +53,57 @@ public class Cliente extends Thread{
 			catch (Exception e) {
 				e.printStackTrace();
 			}
-			escritor.println();
-			lector.readLine();
+			
+			if(algoritmo.equals("Simetrico")){
+				//Por hacer
+			}
+			else {
+
+				FileOutputStream archivo;
+				ObjectOutputStream oos;
+				KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
+				generator.initialize(1024);
+				KeyPair keypair = generator.generateKeyPair();
+				PublicKey publica = keypair.getPublic();
+				PrivateKey privada = keypair.getPrivate();
+				
+				new File("PublicaCliente").delete();
+				
+				archivo = new FileOutputStream("PublicaCliente");
+				oos = new ObjectOutputStream(archivo);
+				oos.writeObject(publica);
+				
+				archivo.close();
+				oos.close();
+				
+				escritor.println(algoritmo);
+				escritor.println("CLIENTE_"+id);
+				String OK = lector.readLine();
+				
+				FileInputStream input = new FileInputStream("PublicaRepetidor");
+				ObjectInputStream ois = new ObjectInputStream(input);
+				PublicKey publicaRepetidor = null;
+				while(input.available() > 0)
+				{
+			        publicaRepetidor = (PublicKey) ois.readObject();
+				}
+				input.close();
+				ois.close();
+				
+				byte[] cifradoRepetidor = Asimetrico.cifrar(publicaRepetidor, "0"+id);
+				String capsulaRepetidor = Encapsulamiento.Encapsular(cifradoRepetidor);
+				
+				escritor.println(capsulaRepetidor);
+				String mensajeDeRepetidor = lector.readLine();
+				
+				byte[] mensajeDeRepetidorBytes = Encapsulamiento.Desencapsular(mensajeDeRepetidor);
+				byte[] descifrado = Asimetrico.descifrar(privada, mensajeDeRepetidorBytes);
+				String respuestaFinal = new String(descifrado);
+				System.out.println(respuestaFinal);
+				
+				/*
+				*/
+			}
 			
 			escritor.close();
 			lector.close();
@@ -46,9 +111,5 @@ public class Cliente extends Thread{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-	}
-	public static void main(String[] args) throws IOException {
-		
-	}
+}
 }
