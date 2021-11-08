@@ -28,16 +28,16 @@ public class Servidor extends Thread{
 		
 		Map<String, String> map = new HashMap<String, String>();
 
-		map.put("00", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa1");
-		map.put("01", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa2");
-		map.put("02", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa3");
-		map.put("03", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa4");
-		map.put("04", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa5");
-		map.put("05", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa6");
-		map.put("06", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa7");
-		map.put("07", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa8");
-		map.put("08", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa9");
-		map.put("09", "aaaaaaaaaaaaaaaaaaaaaaaaaaaa10");
+		map.put("00", "Código oculto número 100000000");
+		map.put("01", "Código oculto número 100000001");
+		map.put("02", "Código oculto número 100000002");
+		map.put("03", "Código oculto número 100000003");
+		map.put("04", "Código oculto número 100000004");
+		map.put("05", "Código oculto número 100000005");
+		map.put("06", "Código oculto número 100000006");
+		map.put("07", "Código oculto número 100000007");
+		map.put("08", "Código oculto número 100000008");
+		map.put("09", "Código oculto número 100000009");
 		
 		try {
 			

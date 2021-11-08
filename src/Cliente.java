@@ -55,7 +55,7 @@ public class Cliente extends Thread{
 			}
 			
 			if(algoritmo.equals("Simetrico")){
-				
+				System.out.println("CIFRADO SIMETRICO");
 				FileOutputStream archivo;
 				ObjectOutputStream oos;
 				KeyGenerator keygen = KeyGenerator.getInstance("AES");
@@ -86,15 +86,16 @@ public class Cliente extends Thread{
 				byte[] mensajeDeRepetidorBytes = Encapsulamiento.Desencapsular(mensajeDeRepetidor);
 				byte[] descifrado = Simetrico.descifrar(llave, mensajeDeRepetidorBytes);
 				String respuestaFinal = new String(descifrado);
-				System.out.println(respuestaFinal);
+				
 				long endTime = System.nanoTime();
 				
 				// Calcular tiempo 
 				System.out.println("Mensaje se envia al repetidor "+( endTime -startTime));
 				
+				System.out.println("Mensaje de respuesta: " + respuestaFinal);
 			}
-			else {
-
+			else if(algoritmo.equals("Asimetrico")){
+				System.out.println("CIFRADO ASIMETRICO");
 				FileOutputStream archivo;
 				ObjectOutputStream oos;
 				KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
@@ -136,14 +137,18 @@ public class Cliente extends Thread{
 				byte[] mensajeDeRepetidorBytes = Encapsulamiento.Desencapsular(mensajeDeRepetidor);
 				byte[] descifrado = Asimetrico.descifrar(privada, mensajeDeRepetidorBytes);
 				String respuestaFinal = new String(descifrado);
-				System.out.println(respuestaFinal);
 				
 				long endTime = System.nanoTime();
 				// Calcular tiempo 
 				System.out.println("Mensaje se envia al repetidor "+( endTime -startTime)+ " nanosegundos");
 				
+				System.out.println("Mensaje de respuesta: " + respuestaFinal);
 				/*
 				*/
+			}
+			else {
+				System.out.println("Algoritmo no reconocido");
+				System.exit(0);
 			}
 			
 			escritor.close();

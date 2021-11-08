@@ -54,7 +54,18 @@ public class Main {
 		new Repetidor().start();
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Ingrese la cantidad de clientes: ");
-		int i = sc.nextInt();
+		int i = 0;
+		try {
+			i = sc.nextInt();
+		}catch (Exception e) {
+			System.out.println("Valor no válido");
+			System.exit(0);
+		}
+		if(i<1)
+		{
+			System.out.println("Debe ser un valor mayor o igual a 1");
+			System.exit(0);
+		}
 		System.out.print("Ingrese el algoritmo de clientes: ");
 		String algo2 = sc.next();
 		
@@ -70,7 +81,7 @@ public class Main {
 			else {
 				algo="Asimetrico";
 			}
-			new Cliente(valor,algo2);//Si se cambia la variable a algo
+			new Cliente(valor,algo2);//Si se cambia la variable a algo se deja que el programa decida el algoritmo a usar por cada cliente
 		}
 		
 		System.exit(0);
