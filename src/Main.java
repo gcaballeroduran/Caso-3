@@ -64,7 +64,9 @@ public class Main {
 			else {
 				algo="Asimetrico";
 			}
-			new Cliente(i,"Asimetrico"); //Por ahora todos asimetricos CAMBIAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			new Cliente(i,"Simetrico"); //Por ahora todos asimetricos CAMBIAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		}
+		
+		System.exit(0);
 	}
 }

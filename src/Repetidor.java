@@ -14,7 +14,9 @@ import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
-import com.sun.javafx.binding.SelectBinding.AsInteger;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+
 
 public class Repetidor extends Thread{
 
@@ -46,6 +48,8 @@ public class Repetidor extends Thread{
 				
 				new File("PublicaRepetidor").delete();
 
+				// ASIMETRICO
+				
 				FileOutputStream archivo;
 				ObjectOutputStream oos;
 				archivo = new FileOutputStream("PublicaRepetidor");
@@ -54,6 +58,26 @@ public class Repetidor extends Thread{
 				
 				archivo.close();
 				oos.close();
+				
+				/// SIMETRICO
+				
+				new File("SimetricoRepetidor").delete();
+
+				FileOutputStream archivoSimetrica;
+				ObjectOutputStream ooss;
+				archivoSimetrica = new FileOutputStream("SimetricoRepetidor");
+				ooss = new ObjectOutputStream(archivoSimetrica);
+				
+				
+				KeyGenerator keygen = KeyGenerator.getInstance("AES");
+				keygen.init(128);
+				SecretKey secretKey = keygen.generateKey();
+				
+			
+				ooss.writeObject(secretKey);
+				
+				archivoSimetrica.close();
+				ooss.close();
 				
 				try {
 					PrintWriter escritorCliente = new PrintWriter(socketCliente.getOutputStream(), true);
@@ -77,7 +101,50 @@ public class Repetidor extends Thread{
 					
 					if(algoritmo.equals("Simetrico"))
 					{
-						//Por hacer
+						String cliente = lectorCliente.readLine();
+						escritorCliente.println("OK");
+						
+						String capsulaCliente = lectorCliente.readLine();
+						byte[] AsimCliente = Encapsulamiento.Desencapsular(capsulaCliente);
+						byte[] mensajeClienteByte = Simetrico.descifrar(secretKey, AsimCliente);
+						String mensajeCliente = new String(mensajeClienteByte);
+						
+						FileInputStream input = new FileInputStream("SimetricoServidor");
+						ObjectInputStream ois = new ObjectInputStream(input);
+						SecretKey secretKeyServidor = null;
+						while(input.available() > 0)
+						{
+							secretKeyServidor = (SecretKey) ois.readObject();
+						}
+						input.close();
+						ois.close();
+
+						System.out.println(mensajeCliente);
+						byte[] cifradoServidor = Simetrico.cifrar(secretKeyServidor, mensajeCliente);
+						String capsulaServidor = Encapsulamiento.Encapsular(cifradoServidor);
+						
+						escritorServidor.println(capsulaServidor);
+						
+						String CapsulaServidor = lectorServidor.readLine();
+						
+						byte[] AsimDeServidor = Encapsulamiento.Desencapsular(CapsulaServidor);
+						byte[] mensajeDeServidorBytes = Simetrico.descifrar(secretKey, AsimDeServidor);
+						String mensajeDeServidor = new String(mensajeDeServidorBytes);
+						
+						
+						FileInputStream input2 = new FileInputStream("SimetricoCliente");
+						ObjectInputStream ois2 = new ObjectInputStream(input2);
+						SecretKey secretKeyCliente = null;
+						while(input2.available() > 0)
+						{
+							secretKeyCliente = (SecretKey) ois2.readObject();
+						}
+						input2.close();
+						ois2.close();
+						
+						byte[] mensajeAClienteBytes = Simetrico.cifrar(secretKeyCliente, mensajeDeServidor);
+						String CapsulaACliente = Encapsulamiento.Encapsular(mensajeAClienteBytes);
+						escritorCliente.println(CapsulaACliente);
 					}
 					else {
 
@@ -145,7 +212,7 @@ public class Repetidor extends Thread{
 				        
 				        String descifrado = new String(texto);
 				        
-				        System.out.println("Me llegó del usuario " + descifrado);
+				        System.out.println("Me llegï¿½ del usuario " + descifrado);
 				        */
 					}
 					

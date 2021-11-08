@@ -16,6 +16,9 @@ import java.security.PublicKey;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+
 public class Servidor extends Thread{
 
 	private static final int PUERTO = 3401; //Puerto del servidor
@@ -37,6 +40,9 @@ public class Servidor extends Thread{
 		map.put("09", "aaaaaaaaaaaaaaaaaaaaaaaaaaaa10");
 		
 		try {
+			
+			// ASIMETRICO
+			
 			FileOutputStream archivo;
 			ObjectOutputStream oos;
 			KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
@@ -52,6 +58,27 @@ public class Servidor extends Thread{
 			
 			archivo.close();
 			oos.close();
+			
+			/// SIMETRICO
+			
+			new File("SimetricoServidor").delete();
+
+			FileOutputStream archivoSimetrica;
+			ObjectOutputStream ooss;
+			archivoSimetrica = new FileOutputStream("SimetricoServidor");
+			ooss = new ObjectOutputStream(archivoSimetrica);
+			
+			
+			KeyGenerator keygen = KeyGenerator.getInstance("AES");
+			keygen.init(128);
+			SecretKey secretKey = keygen.generateKey();
+			
+		
+			ooss.writeObject(secretKey);
+			
+			archivoSimetrica.close();
+			ooss.close();
+			
 			ServerSocket ss = null;
 			boolean seguir = true;
 		
@@ -70,7 +97,28 @@ public class Servidor extends Thread{
 				String algoritmo = lector.readLine();
 				if(algoritmo.equals("Simetrico"))
 				{
-					//Por hacer
+					String cifradoRepetidor = lector.readLine();
+					byte[] SimRepetidor = Encapsulamiento.Desencapsular(cifradoRepetidor);
+					byte[] mensajeRepetidorByte = Simetrico.descifrar(secretKey, SimRepetidor);
+					System.out.println(mensajeRepetidorByte);
+					String mensajeRepetidor = new String(mensajeRepetidorByte);
+
+					String envio = map.get(mensajeRepetidor);
+					
+					FileInputStream input = new FileInputStream("SimetricoRepetidor");
+					ObjectInputStream ois = new ObjectInputStream(input);
+					SecretKey secretKeyRepetidor = null;
+					while(input.available() > 0)
+					{
+						secretKeyRepetidor = (SecretKey) ois.readObject();
+					}
+					input.close();
+					ois.close();
+					
+					
+					byte[] SimParaRepetidor = Simetrico.cifrar(secretKeyRepetidor, envio);
+					String CapsulaParaRepetidor = Encapsulamiento.Encapsular(SimParaRepetidor);
+					escritor.println(CapsulaParaRepetidor);
 				}
 				else
 				{

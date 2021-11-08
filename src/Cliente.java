@@ -13,9 +13,8 @@ import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
+import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-
-import com.sun.javafx.binding.SelectBinding.AsObject;
 
 
 public class Cliente extends Thread{
@@ -55,7 +54,49 @@ public class Cliente extends Thread{
 			}
 			
 			if(algoritmo.equals("Simetrico")){
-				//Por hacer
+				
+				FileOutputStream archivo;
+				ObjectOutputStream oos;
+				KeyGenerator keygen = KeyGenerator.getInstance("AES");
+				keygen.init(128);
+				llave = keygen.generateKey();
+				
+				
+				new File("SimetricoCliente").delete();
+				
+				archivo = new FileOutputStream("SimetricoCliente");
+				oos = new ObjectOutputStream(archivo);
+				oos.writeObject(llave);
+				
+				archivo.close();
+				oos.close();
+				
+				escritor.println(algoritmo);
+				escritor.println("CLIENTE_"+id);
+				String OK = lector.readLine();
+				
+				FileInputStream input = new FileInputStream("SimetricoRepetidor");
+				
+				ObjectInputStream ois = new ObjectInputStream(input);
+				SecretKey secretKeyRepetidor = null;
+				while(input.available() > 0)
+				{
+					secretKeyRepetidor = (SecretKey) ois.readObject();
+				}
+				input.close();
+				ois.close();
+				
+				byte[] cifradoRepetidor = Simetrico.cifrar(secretKeyRepetidor, "0"+id);
+				String capsulaRepetidor = Encapsulamiento.Encapsular(cifradoRepetidor);
+				
+				escritor.println(capsulaRepetidor);
+				String mensajeDeRepetidor = lector.readLine();
+				
+				byte[] mensajeDeRepetidorBytes = Encapsulamiento.Desencapsular(mensajeDeRepetidor);
+				byte[] descifrado = Simetrico.descifrar(llave, mensajeDeRepetidorBytes);
+				String respuestaFinal = new String(descifrado);
+				System.out.println(respuestaFinal);
+				
 			}
 			else {
 
